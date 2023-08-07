@@ -1,25 +1,43 @@
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
+
+from db.session import get_async_session as get_db
+from sqlalchemy.future import select
 from . import crud, models, schemas
-from db.session  import get_async_session as get_db
 
 router = APIRouter()
 
 
+# Роутер для  Category
 @router.post("/categories/", response_model=schemas.Category)
-def create_category(category: schemas.CategoryCreate, db: Session = Depends(get_db)):
-    db_category = crud.get_category_by_name(db, name=category.name)
+async def create_category(
+        category: schemas.CategoryCreate,
+        db: Session = Depends(get_db)):
+    db_category = await crud.get_category_by_name(db, name=category.name)
     if db_category:
         raise HTTPException(status_code=400, detail="Category already exists")
-    return crud.create_category(db=db, category=category)
+    return await crud.create_category(db=db, category=category)
+
+
+@router.get("/categories/{category_id}", response_model=schemas.Category)
+async def get_category(category_id: int, db: get_db = Depends(get_db)):
+    category = await crud.get_category(db, category_id)
+    if not category:
+        raise HTTPException(status_code=404, detail="Category not found")
+    return category
 
 
 @router.get("/categories/", response_model=list[schemas.Category])
-def read_categories(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
-    categories = crud.get_categories(db=db, skip=skip, limit=limit)
+async def get_categories(
+    skip: int = 0,
+    limit: int = 100,
+    db: get_db = Depends(get_db)
+    ):
+    categories = await crud.get_categories(db, skip=skip, limit=limit)
     return categories
 
 
+# Роутер для  Tag
 @router.post("/tags/", response_model=schemas.Tag)
 async def create_tag(tag: schemas.TagCreate, db: get_db = Depends(get_db)):
     db_tag = await crud.get_tag_by_name(db, name=tag.name)

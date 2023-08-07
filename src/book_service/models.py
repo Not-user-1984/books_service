@@ -34,10 +34,9 @@ class Book(Base):
     comments = relationship("Comment", back_populates="book")
 
 
-
 class BookTag(Base):
     __tablename__ = "book_tags"
-    __table_args__ = {'extend_existing': True}    
+    __table_args__ = {'extend_existing': True}
     book_id = Column(Integer, ForeignKey("books.id"), primary_key=True)
     tag_id = Column(Integer, ForeignKey("tags.id"), primary_key=True)
 
