@@ -1,8 +1,8 @@
 """First migration
 
-Revision ID: 58fc53a90180
+Revision ID: 764eb9c476f3
 Revises: 
-Create Date: 2023-08-04 19:24:43.774003
+Create Date: 2023-08-19 13:19:20.395138
 
 """
 from typing import Sequence, Union
@@ -12,7 +12,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision: str = '58fc53a90180'
+revision: str = '764eb9c476f3'
 down_revision: Union[str, None] = None
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
@@ -27,6 +27,13 @@ def upgrade() -> None:
     )
     op.create_index(op.f('ix_categories_id'), 'categories', ['id'], unique=False)
     op.create_index(op.f('ix_categories_name'), 'categories', ['name'], unique=True)
+    op.create_table('profilel_user',
+    sa.Column('id', sa.Integer(), nullable=False),
+    sa.Column('icon_url', sa.String(), nullable=True),
+    sa.Column('name', sa.String(), nullable=True),
+    sa.PrimaryKeyConstraint('id')
+    )
+    op.create_index(op.f('ix_profilel_user_id'), 'profilel_user', ['id'], unique=False)
     op.create_table('tags',
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('name', sa.String(), nullable=True),
@@ -45,13 +52,6 @@ def upgrade() -> None:
     sa.Column('is_verified', sa.Boolean(), nullable=False),
     sa.PrimaryKeyConstraint('id')
     )
-    op.create_table('users',
-    sa.Column('id', sa.Integer(), nullable=False),
-    sa.Column('icon_url', sa.String(), nullable=True),
-    sa.Column('name', sa.String(), nullable=True),
-    sa.PrimaryKeyConstraint('id')
-    )
-    op.create_index(op.f('ix_users_id'), 'users', ['id'], unique=False)
     op.create_table('books',
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('image_url', sa.String(), nullable=True),
@@ -68,7 +68,7 @@ def upgrade() -> None:
     op.create_table('book_tags',
     sa.Column('book_id', sa.Integer(), nullable=False),
     sa.Column('tag_id', sa.Integer(), nullable=False),
-    sa.Column('id', sa.Integer(), nullable=False, extend_existing=True),
+    sa.Column('id', sa.Integer(), nullable=False),
     sa.ForeignKeyConstraint(['book_id'], ['books.id'], ),
     sa.ForeignKeyConstraint(['tag_id'], ['tags.id'], ),
     sa.PrimaryKeyConstraint('book_id', 'tag_id', 'id')
@@ -85,18 +85,18 @@ def upgrade() -> None:
     op.create_table('user_cart',
     sa.Column('user_id', sa.Integer(), nullable=False),
     sa.Column('book_id', sa.Integer(), nullable=False),
-    sa.Column('id', sa.Integer(), nullable=False, extend_existing=True),
+    sa.Column('id', sa.Integer(), nullable=False),
     sa.ForeignKeyConstraint(['book_id'], ['books.id'], ),
-    sa.ForeignKeyConstraint(['user_id'], ['users.id'], ),
+    sa.ForeignKeyConstraint(['user_id'], ['profilel_user.id'], ),
     sa.PrimaryKeyConstraint('user_id', 'book_id', 'id')
     )
     op.create_index(op.f('ix_user_cart_id'), 'user_cart', ['id'], unique=False)
     op.create_table('user_favorites',
     sa.Column('user_id', sa.Integer(), nullable=False),
     sa.Column('book_id', sa.Integer(), nullable=False),
-    sa.Column('id', sa.Integer(), nullable=False, extend_existing=True),
+    sa.Column('id', sa.Integer(), nullable=False),
     sa.ForeignKeyConstraint(['book_id'], ['books.id'], ),
-    sa.ForeignKeyConstraint(['user_id'], ['users.id'], ),
+    sa.ForeignKeyConstraint(['user_id'], ['profilel_user.id'], ),
     sa.PrimaryKeyConstraint('user_id', 'book_id', 'id')
     )
     op.create_index(op.f('ix_user_favorites_id'), 'user_favorites', ['id'], unique=False)
@@ -116,12 +116,12 @@ def downgrade() -> None:
     op.drop_index(op.f('ix_books_title'), table_name='books')
     op.drop_index(op.f('ix_books_id'), table_name='books')
     op.drop_table('books')
-    op.drop_index(op.f('ix_users_id'), table_name='users')
-    op.drop_table('users')
     op.drop_table('user')
     op.drop_index(op.f('ix_tags_name'), table_name='tags')
     op.drop_index(op.f('ix_tags_id'), table_name='tags')
     op.drop_table('tags')
+    op.drop_index(op.f('ix_profilel_user_id'), table_name='profilel_user')
+    op.drop_table('profilel_user')
     op.drop_index(op.f('ix_categories_name'), table_name='categories')
     op.drop_index(op.f('ix_categories_id'), table_name='categories')
     op.drop_table('categories')

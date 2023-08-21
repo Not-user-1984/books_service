@@ -48,7 +48,7 @@ class BookCreate(BookBase):
 class Book(BookBase):
     id: int
     category: Category
-    tags: List[Tag] = []
+    tags: List[str] = []
 
     class Config:
         orm_mode = True
@@ -102,4 +102,3 @@ class UserCart(BaseModel):
 
     class Config:
         orm_mode = True
-

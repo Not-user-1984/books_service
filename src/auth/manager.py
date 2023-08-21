@@ -13,7 +13,8 @@ class UserManager(IntegerIDMixin, BaseUserManager[User, int]):
     reset_password_token_secret = Settings.SECRET_AUTH
     verification_token_secret = Settings.SECRET_AUTH
 
-    async def on_after_register(self, user: User, request: Optional[Request] = None):
+    async def on_after_register(
+            self, user: User, request: Optional[Request] = None):
         print(f"User {user.id} has registered.")
 
     async def create(
@@ -37,7 +38,8 @@ class UserManager(IntegerIDMixin, BaseUserManager[User, int]):
         user_dict["hashed_password"] = self.password_helper.hash(password)
 
 
-        created_user = await self.user_db.create(user_dict)
+        created_user = await self.user_db.create(
+            user_dict)
 
         await self.on_after_register(created_user, request)
 

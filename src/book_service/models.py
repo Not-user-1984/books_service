@@ -50,8 +50,8 @@ class Comment(Base):
     book = relationship("Book", back_populates="comments")
 
 
-class User(Base):
-    __tablename__ = "users"
+class ProfilelUser(Base):
+    __tablename__ = "profilel_user"
     __table_args__ = {'extend_existing': True}
     id = Column(Integer, primary_key=True, index=True)
     icon_url = Column(String)
@@ -63,12 +63,12 @@ class User(Base):
 class UserFavorite(Base):
     __tablename__ = "user_favorites"
     __table_args__ = {'extend_existing': True}
-    user_id = Column(Integer, ForeignKey("users.id"), primary_key=True)
+    user_id = Column(Integer, ForeignKey("profilel_user.id"), primary_key=True)
     book_id = Column(Integer, ForeignKey("books.id"), primary_key=True)
 
 
 class UserCart(Base):
     __tablename__ = "user_cart"
     __table_args__ = {'extend_existing': True}
-    user_id = Column(Integer, ForeignKey("users.id"), primary_key=True)
+    user_id = Column(Integer, ForeignKey("profilel_user.id"), primary_key=True)
     book_id = Column(Integer, ForeignKey("books.id"), primary_key=True)

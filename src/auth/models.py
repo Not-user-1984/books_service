@@ -4,8 +4,7 @@ from fastapi_users_db_sqlalchemy import SQLAlchemyBaseUserTable
 from sqlalchemy import (JSON, TIMESTAMP, Boolean, Column, ForeignKey, Integer,
                         MetaData, String, Table)
 
-from db.base_class import Base
-from book_service.models import User
+from db.base import Base
 
 
 class User(SQLAlchemyBaseUserTable[int], Base):

@@ -1,14 +1,15 @@
 from fastapi import APIRouter, Depends, HTTPException, status
+from sqlalchemy.future import select
 from sqlalchemy.orm import Session
 
 from db.session import get_async_session as get_db
-from sqlalchemy.future import select
+
 from . import crud, models, schemas
 
 router = APIRouter()
 
 
-# Роутер для  Category
+# Роутеры для Category
 @router.post("/categories/", response_model=schemas.Category)
 async def create_category(
         category: schemas.CategoryCreate,
@@ -32,14 +33,17 @@ async def get_categories(
     skip: int = 0,
     limit: int = 100,
     db: get_db = Depends(get_db)
-    ):
+):
     categories = await crud.get_categories(db, skip=skip, limit=limit)
     return categories
 
 
-# Роутер для  Tag
+# Роутеры для  Tag
 @router.post("/tags/", response_model=schemas.Tag)
-async def create_tag(tag: schemas.TagCreate, db: get_db = Depends(get_db)):
+async def create_tag(
+    tag: schemas.TagCreate,
+    db: get_db = Depends(get_db)
+):
     db_tag = await crud.get_tag_by_name(db, name=tag.name)
     if db_tag:
         raise HTTPException(status_code=400, detail="Tag already exists")

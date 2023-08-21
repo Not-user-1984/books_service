@@ -1,10 +1,8 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 from . import models, schemas
 from sqlalchemy.future import select
-from sqlalchemy.orm import selectinload
 from db.session import get_async_session as AsyncSession
-import tracemalloc
-tracemalloc.start()
+
 
 # CRUD операции для модели Category
 async def get_category_by_name(db: AsyncSession, name: str):
@@ -20,12 +18,17 @@ async def create_category(db: AsyncSession, category: schemas.CategoryCreate):
     await db.refresh(db_category)
     return db_category
 
+
 async def get_category(db: AsyncSession, category_id: int):
-    result = await db.execute(select(models.Category).where(models.Category.id == category_id))
+    result = await db.execute(
+        select(models.Category).where(models.Category.id == category_id))
     return  result.scalar_one()
 
-async def get_categories(db: AsyncSession, skip: int = 0, limit: int = 100):
-    result = await db.execute(select(models.Category).offset(skip).limit(limit))
+
+async def get_categories(
+        db: AsyncSession, skip: int = 0, limit: int = 100):
+    result = await db.execute(
+        select(models.Category).offset(skip).limit(limit))
     return result.scalars().all()
 
 
@@ -48,13 +51,28 @@ def get_tags(db: AsyncSession, skip: int = 0, limit: int = 100):
     return db.query(models.Tag).offset(skip).limit(limit).all()
 
 
-# CRUD операции для модели Book
 async def create_book(db: AsyncSession, book: schemas.BookCreate):
+    # Найти существующую категорию по category_id
+    category = await get_category(db, book.category_id)
+
+    # Создать или связать существующие теги
     tags = []
-    for tag_id in book.tags:
-        db_tag = await db.execute(select(models.Tag).where(models.Tag.id == tag_id))
-        tags.append(db_tag.scalar_one_or_none())
-    db_book = models.Book(**book.dict(), tags=tags)
+    for tag_name in book.tags:
+        db_tag = await get_tag_by_name(db, tag_name)
+        if db_tag is None:
+            # Создать новый тег, если он не существует
+            new_tag = schemas.TagCreate(name=tag_name)
+            db_tag = await create_tag(db, new_tag)
+        tags.append(db_tag)
+
+    # Создать книгу с категорией и тегами
+    db_book = models.Book(image_url=book.image_url,
+                title=book.title,
+                author=book.author,
+                rating=book.rating,
+                description=book.description,
+                category=category, tags=tags
+    )
     db.add(db_book)
     await db.commit()
     await db.refresh(db_book)
