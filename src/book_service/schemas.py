@@ -1,13 +1,17 @@
 from pydantic import BaseModel
 
+
 class CategoryBase(BaseModel):
     name: str
+
 
 class CategoryCreate(CategoryBase):
     pass
 
+
 class Category(CategoryBase):
     id: int
+
 
 class BookBase(BaseModel):
     title: str
@@ -18,12 +22,15 @@ class BookBase(BaseModel):
     publisher: str
     category_id: int
 
+
 class BookCreate(BookBase):
     pass
 
+
 class Book(BookBase):
     id: int
-    category: Category
+    # category: Category
+
 
 class UserBookBase(BaseModel):
     user_id: int
@@ -36,13 +43,19 @@ class UserBookBase(BaseModel):
     to_read_later: bool = False
     progress: int = 0
 
+
 class UserBookCreate(UserBookBase):
     pass
 
+
+class UserBookResponse(UserBookBase):
+    id: int
+
+
 class UserBook(UserBookBase):
     id: int
-    user: "User"
     book: "Book"
+
 
 class UserBase(BaseModel):
     name: str
@@ -52,4 +65,3 @@ class UserCreate(UserBase):
 
 class User(UserBase):
     id: int
-    user_books: list[UserBook] = []

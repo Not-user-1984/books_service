@@ -8,6 +8,7 @@ class Category(Base):
 
     id = Column(Integer, primary_key=True, index=True)
     name = Column(String, unique=True, index=True)
+    books = relationship("Book", back_populates="category", uselist=True)
 
 
 class Book(Base):
@@ -38,7 +39,6 @@ class UserBook(Base):
     to_read_later = Column(Boolean, default=False)
     progress = Column(Integer, default=0)
     user = relationship("User", back_populates="user_books")
-    book = relationship("Book", back_populates="user_books")
 
 
 class User(Base):
