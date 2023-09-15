@@ -1,15 +1,16 @@
 import os
 import sys
+
 sys.path.append(os.path.join(sys.path[0], 'src'))
+from db.database import Base, get_async_session
 from logging.config import fileConfig
 
 from alembic import context
 from sqlalchemy import engine_from_config, pool
-from src.book_service.models import *
-from src.auth.models import *
+
+from src.db.models import *
 from src.config import settings
-from src.db.base import Base
-from src.db.session import get_async_session
+
 
 config = context.config
 section = config.config_ini_section

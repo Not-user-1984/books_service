@@ -1,104 +1,55 @@
 from pydantic import BaseModel
-from typing import List
-
 
 class CategoryBase(BaseModel):
     name: str
 
-
 class CategoryCreate(CategoryBase):
     pass
-
 
 class Category(CategoryBase):
     id: int
 
-    class Config:
-        orm_mode = True
-
-
-class TagBase(BaseModel):
-    name: str
-
-
-class TagCreate(TagBase):
-    pass
-
-
-class Tag(TagBase):
-    id: int
-
-    class Config:
-        orm_mode = True
-
-
 class BookBase(BaseModel):
-    image_url: str
     title: str
+    rating: int
+    page_count: int
     author: str
-    rating: float
     description: str
-
+    publisher: str
+    category_id: int
 
 class BookCreate(BookBase):
-    category_id: int
-    tags: List[int] = []
-
+    pass
 
 class Book(BookBase):
     id: int
     category: Category
-    tags: List[str] = []
 
-    class Config:
-        orm_mode = True
+class UserBookBase(BaseModel):
+    user_id: int
+    page_count: int
+    user_title: str
+    user_author: str
+    user_description: str
+    user_publisher: str
+    is_read: bool = False
+    to_read_later: bool = False
+    progress: int = 0
 
-
-class CommentBase(BaseModel):
-    text: str
-
-
-class CommentCreate(CommentBase):
+class UserBookCreate(UserBookBase):
     pass
 
-
-class Comment(CommentBase):
+class UserBook(UserBookBase):
     id: int
-    book_id: int
-
-    class Config:
-        orm_mode = True
-
+    user: "User"
+    book: "Book"
 
 class UserBase(BaseModel):
-    icon_url: str
     name: str
-
 
 class UserCreate(UserBase):
     pass
 
-
 class User(UserBase):
     id: int
-    favorites: List[Book] = []
-    cart: List[Book] = []
-
-    class Config:
-        orm_mode = True
-
-
-class UserFavorite(BaseModel):
-    user_id: int
-    book_id: int
-
-    class Config:
-        orm_mode = True
-
-
-class UserCart(BaseModel):
-    user_id: int
-    book_id: int
-
-    class Config:
-        orm_mode = True
+    user_books: list[UserBook] = []
