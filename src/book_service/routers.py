@@ -122,6 +122,17 @@ async def read_user_book_endpoint(
     return user_book
 
 
+@router.get("/user_books", response_model=list[schemas.UserBook])
+async def read_user_books_endpoint(
+    user_id: int,
+    db: AsyncSession = Depends(get_async_session)
+):
+    user_book = await user_books_crud.get_user_books(db, user_id)
+    if not user_book:
+        raise HTTPException(status_code=404, detail="UserBook not found")
+    return user_book
+
+
 @router.put("/user_books/{user_book_id}",
             response_model=schemas.UserBook)
 async def update_user_book_endpoint(

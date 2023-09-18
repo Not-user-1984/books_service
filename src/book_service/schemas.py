@@ -54,7 +54,7 @@ class UserBookResponse(UserBookBase):
 
 class UserBook(UserBookBase):
     id: int
-    book: "Book"
+
 
 
 class UserBase(BaseModel):

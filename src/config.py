@@ -14,7 +14,8 @@ class Settings:
     POSTGRES_DB: str = os.getenv("POSTGRES_DB", "db")
     SECRET_AUTH: str = os.getenv("SECRET_AUTH")
     DATABASE_URL: str = f"postgresql+asyncpg://{POSTGRES_USER}:{POSTGRES_PASSWORD}@{POSTGRES_SERVER}:{POSTGRES_PORT}/{POSTGRES_DB}?async_fallback=True"
-    app_title: str = 'CodexZone'
+    app_title: str = 'read_books_bro_bot'
+    BOT_TOKEN: str = '6615386998:AAFCezggZWdqc8rW7eySLuvJTM8BwaeU1wc'
 
 
 settings = Settings()

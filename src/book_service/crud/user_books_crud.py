@@ -17,7 +17,6 @@ async def create_user_book(
     return db_user_book
 
 
-# Read
 async def get_user_book(
         db: AsyncSession,
         user_book_id: int):
@@ -27,7 +26,15 @@ async def get_user_book(
     return user_book.scalar_one_or_none()
 
 
-# Update
+async def get_user_books(db: AsyncSession,
+                         user_id: int):
+    user_books = await db.execute(
+        select(models.UserBook)
+        .where(models.UserBook.user_id == user_id)
+    )
+    return user_books.scalars().all()
+
+
 async def update_user_book(
         db: AsyncSession,
         user_book_id: int,
@@ -41,8 +48,9 @@ async def update_user_book(
     return db_user_book
 
 
-# Delete
-async def delete_user_book(db: AsyncSession, user_book_id: int):
+async def delete_user_book(
+        db: AsyncSession,
+        user_book_id: int):
     db_user_book = await get_user_book(db, user_book_id)
     if db_user_book:
         await db.delete(db_user_book)
