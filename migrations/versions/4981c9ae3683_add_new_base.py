@@ -1,8 +1,8 @@
 """add new base
 
-Revision ID: 1963719f5f92
-Revises: 5139031a4940
-Create Date: 2023-09-15 14:25:43.314812
+Revision ID: 4981c9ae3683
+Revises: 
+Create Date: 2023-09-19 11:09:14.913300
 
 """
 from typing import Sequence, Union
@@ -12,8 +12,8 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision: str = '1963719f5f92'
-down_revision: Union[str, None] = '5139031a4940'
+revision: str = '4981c9ae3683'
+down_revision: Union[str, None] = None
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
 
@@ -29,10 +29,15 @@ def upgrade() -> None:
     op.create_index(op.f('ix_categories_name'), 'categories', ['name'], unique=True)
     op.create_table('users',
     sa.Column('id', sa.Integer(), nullable=False),
-    sa.Column('name', sa.String(), nullable=True),
+    sa.Column('email', sa.String(), nullable=False),
+    sa.Column('username', sa.String(), nullable=False),
+    sa.Column('registered_at', sa.TIMESTAMP(), nullable=True),
+    sa.Column('hashed_password', sa.String(length=1024), nullable=False),
+    sa.Column('is_active', sa.Boolean(), nullable=False),
+    sa.Column('is_superuser', sa.Boolean(), nullable=False),
+    sa.Column('is_verified', sa.Boolean(), nullable=False),
     sa.PrimaryKeyConstraint('id')
     )
-    op.create_index(op.f('ix_users_id'), 'users', ['id'], unique=False)
     op.create_table('books',
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('title', sa.String(), nullable=True),
@@ -72,7 +77,6 @@ def downgrade() -> None:
     op.drop_index(op.f('ix_books_title'), table_name='books')
     op.drop_index(op.f('ix_books_id'), table_name='books')
     op.drop_table('books')
-    op.drop_index(op.f('ix_users_id'), table_name='users')
     op.drop_table('users')
     op.drop_index(op.f('ix_categories_name'), table_name='categories')
     op.drop_index(op.f('ix_categories_id'), table_name='categories')
