@@ -58,7 +58,7 @@ class UserBook(UserBookBase):
 
 
 class UserBase(BaseModel):
-    name: str
+    username: str
 
 class UserCreate(UserBase):
     pass

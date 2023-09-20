@@ -168,12 +168,12 @@ async def create_user_endpoint(
     return await users_crud.create_user(db, user)
 
 
-@router.get("/users/{user_id}", response_model=schemas.User)
+@router.get("/users/{username}", response_model=schemas.User)
 async def read_user_endpoint(
-    user_id: int,
+    username: str,
     db: AsyncSession = Depends(get_async_session)
 ):
-    user = await users_crud.get_user(db, user_id)
+    user = await users_crud.get_user(db, username)
     if not user:
         raise HTTPException(status_code=404, detail="User not found")
     return user

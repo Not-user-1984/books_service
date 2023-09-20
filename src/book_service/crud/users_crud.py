@@ -20,9 +20,9 @@ async def create_user(
 # Read
 async def get_user(
         db: AsyncSession,
-        user_id: int):
+        username: str):
     user = await db.execute(
-        select(models.User).where(models.User.id == user_id)
+        select(models.User).where(models.User.username == username)
     )
     return user.scalar_one_or_none()
 
