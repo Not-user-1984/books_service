@@ -55,8 +55,6 @@ class UserBookResponse(UserBookBase):
 class UserBook(UserBookBase):
     id: int
 
-
-
 class UserBase(BaseModel):
     username: str
 

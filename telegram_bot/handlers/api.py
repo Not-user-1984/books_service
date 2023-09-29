@@ -5,7 +5,7 @@ import json
 async def get_user_api(username: str):
     user = f"http://127.0.0.1:8000/users/{username}"
     async with httpx.AsyncClient() as client:
-            return  await client.get(user)
+            return await client.get(user)
 
 
 async def post_register_user_api(data: json):
@@ -16,13 +16,19 @@ async def post_register_user_api(data: json):
                 data=data)
 
 
-async def fetch_login_cookies(data: json):
+async def fetch_login_cookies(username, password):
     async with httpx.AsyncClient() as client:
         url = "http://127.0.0.1:8000/auth/jwt/login"
+        data = {
+            "username": username,
+            "password": password,
+            "grant_type": "",
+            "scope": "",
+            "client_id": "",
+            "client_secret": ""
+        }
         response = await client.post(url, data=data)
-        # Проверяем успешность запроса
-        if response.status_code == 200:
-            # Получаем cookies из ответа
+        if response.status_code == 204:
             cookies = response.cookies
             return cookies
         else:
