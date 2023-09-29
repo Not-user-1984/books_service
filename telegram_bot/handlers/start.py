@@ -1,7 +1,7 @@
 import httpx
 from keyboards import kb
 import text
-from aiogram import F, Router, types
+from aiogram import F, Router
 from aiogram.filters import Command
 from aiogram.types import Message
 
@@ -37,4 +37,6 @@ async def get_data_handler(message: Message):
                     f"Ошибка при запросе к API: {response.status_code}"
                     )
         except Exception as e:
-            await message.answer(f"Произошла ошибка при запросе к API: {str(e)}")
+            await message.answer(
+                f"Произошла ошибка при запросе к API: {str(e)}"
+                )

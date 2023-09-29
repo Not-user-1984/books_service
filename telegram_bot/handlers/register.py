@@ -3,8 +3,8 @@ from aiogram import F, Router, types
 from aiogram.fsm.context import FSMContext
 from aiogram.fsm.state import State, StatesGroup
 from aiogram.types import Message
-
-from .utilits import get_user_api, post_register_user_api
+from aiogram.filters import Command
+from .api import get_user_api, post_register_user_api
 
 router = Router()
 
@@ -16,6 +16,7 @@ class RegistrationStates(StatesGroup):
     waiting_for_valid_name = State()
 
 
+@router.message(Command("auth"))
 @router.callback_query(F.data == "auth")
 async def register_handler(message: Message, state: FSMContext):
     await message.answer("Давайте начнем регистрацию. Введите ваше имя.")
