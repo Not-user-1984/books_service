@@ -12,6 +12,8 @@ import jwt
 router = Router()
 
 secret_key ="kknknsbgfkesf24242ojrjoo"
+
+
 class LoginStates(StatesGroup):
     waiting_for_name = State()
     waiting_for_password = State()
@@ -47,7 +49,10 @@ async def process_password(message: Message, state: FSMContext):
 
 async def decode_jwt_token(jwt_token):
     try:
-        decoded_token = jwt.decode(jwt_token, secret_key, algorithms=["HS256"], verify=False)
+        decoded_token = jwt.decode(
+            jwt_token, secret_key,
+            algorithms=["HS256"],
+            verify=False)
         print(decoded_token)
     except jwt.DecodeError as e:
         print(e)
