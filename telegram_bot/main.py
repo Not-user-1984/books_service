@@ -5,13 +5,10 @@ from aiogram import Bot, Dispatcher
 from aiogram.enums.parse_mode import ParseMode
 from aiogram.fsm.storage.memory import MemoryStorage
 
-
+from config import settings
 from handlers.login import router as login_router
 from handlers.register import router as auth_router
 from handlers.start import router as start_router
-
-
-from config import settings
 
 
 async def main():

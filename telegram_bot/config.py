@@ -9,5 +9,4 @@ class Settings:
     SECRET_AUTH: str = os.getenv("SECRET_AUTH")
 
 
-
 settings = Settings()

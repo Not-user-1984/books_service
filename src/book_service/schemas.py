@@ -29,7 +29,7 @@ class BookCreate(BookBase):
 
 class Book(BookBase):
     id: int
-    # category: Category
+    category: Category
 
 
 class UserBookBase(BaseModel):
