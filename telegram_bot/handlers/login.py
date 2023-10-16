@@ -1,17 +1,14 @@
-import json
-from typing import Any
-from aiogram import F, Router, types
+from aiogram import Router
 from aiogram.filters import Command
 from aiogram.fsm.context import FSMContext
 from aiogram.fsm.state import State, StatesGroup
 from aiogram.types import Message
-from .api import fetch_login_cookies
-import jwt
 
+from .api import fetch_login_token
 
 router = Router()
 
-secret_key ="kknknsbgfkesf24242ojrjoo"
+secret_key = "kknknsbgfkesf24242ojrjoo"
 
 
 class LoginStates(StatesGroup):
@@ -36,23 +33,21 @@ async def process_email(message: Message, state: FSMContext):
 async def process_password(message: Message, state: FSMContext):
     await state.update_data(password=message.text)
     user_data = await state.get_data()
-    await message.answer(
-        f"Спасибо, {user_data['name']}, вход.")
+    await message.answer(f"Спасибо, {user_data['name']}, вход.")
 
-    response = await fetch_login_cookies(
-        user_data['name'], user_data['password'])
+    token = await fetch_login_token(user_data["name"], user_data["password"])
+    print(token)
     # Получаем все куки из объекта response
-    jwt_token = response.get('bonds')
-    print(jwt_token)
-    await decode_jwt_token(jwt_token)
+    # jwt_token = response.get("bonds")
+    # print(jwt_token)
+    # await decode_jwt_token(jwt_token)
 
 
-async def decode_jwt_token(jwt_token):
-    try:
-        decoded_token = jwt.decode(
-            jwt_token, secret_key,
-            algorithms=["HS256"],
-            verify=False)
-        print(decoded_token)
-    except jwt.DecodeError as e:
-        print(e)
+# async def decode_jwt_token(jwt_token):
+#     try:
+#         decoded_token = jwt.decode(
+#             jwt_token, secret_key, algorithms=["HS256"], verify=False
+#         )
+#         print(decoded_token)
+#     except jwt.DecodeError as e:
+#         print(e)

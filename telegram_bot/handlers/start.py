@@ -11,7 +11,8 @@ router = Router()
 @router.message(Command("start"))
 async def start_handler(msg: Message):
     await msg.answer(
-        text.greet.format(name=msg.from_user.full_name), reply_markup=kb.menu)
+        text.greet.format(name=msg.from_user.full_name), reply_markup=kb.menu
+    )
 
 
 @router.message(F.text == "Меню")
@@ -31,12 +32,14 @@ async def get_data_handler(message: Message):
             response = await client.get(api_url)
             if response.status_code == 200:
                 data = response.json()
-                await message.answer(f"Получены данные из API: {data}",)
+                await message.answer(
+                    f"Получены данные из API: {data}",
+                )
             else:
                 await message.answer(
                     f"Ошибка при запросе к API: {response.status_code}"
-                    )
+                )
         except Exception as e:
             await message.answer(
                 f"Произошла ошибка при запросе к API: {str(e)}"
-                )
+            )

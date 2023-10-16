@@ -7,9 +7,7 @@ from book_service import schemas
 
 
 # Create
-async def create_user(
-        db: AsyncSession,
-        user: schemas.UserCreate):
+async def create_user(db: AsyncSession, user: schemas.UserCreate):
     db_user = models.User(**user.dict())
     db.add(db_user)
     await db.commit()
@@ -18,9 +16,7 @@ async def create_user(
 
 
 # Read
-async def get_user(
-        db: AsyncSession,
-        username: str):
+async def get_user(db: AsyncSession, username: str):
     user = await db.execute(
         select(models.User).where(models.User.username == username)
     )
@@ -29,9 +25,8 @@ async def get_user(
 
 # Update
 async def update_user(
-        db: AsyncSession,
-        user_id: int,
-        user_update: schemas.UserCreate):
+    db: AsyncSession, user_id: int, user_update: schemas.UserCreate
+):
     db_user = await get_user(db, user_id)
     if db_user:
         for field, value in user_update.dict().items():

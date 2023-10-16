@@ -18,7 +18,7 @@ async def main():
         start_router,
         auth_router,
         login_router,
-        )
+    )
 
     await bot.delete_webhook(drop_pending_updates=True)
     await dp.start_polling(bot, allowed_updates=dp.resolve_used_update_types())

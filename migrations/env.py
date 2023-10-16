@@ -1,7 +1,7 @@
 import os
 import sys
 
-sys.path.append(os.path.join(sys.path[0], 'src'))
+sys.path.append(os.path.join(sys.path[0], "src"))
 from db.database import Base, get_async_session
 from logging.config import fileConfig
 
@@ -16,7 +16,7 @@ config = context.config
 section = config.config_ini_section
 config.set_section_option(section, "DATABASE_URL", settings.DATABASE_URL)
 
-config.set_main_option('sqlalchemy.url', str(settings.DATABASE_URL))
+config.set_main_option("sqlalchemy.url", str(settings.DATABASE_URL))
 
 if config.config_file_name is not None:
     fileConfig(config.config_file_name)
@@ -26,9 +26,9 @@ target_metadata = Base.metadata
 
 def create_context():
     return {
-        'metadata': target_metadata,
-        'session': get_async_session(),
-        'alembic_version': context.get_context().version
+        "metadata": target_metadata,
+        "session": get_async_session(),
+        "alembic_version": context.get_context().version,
     }
 
 
@@ -38,8 +38,8 @@ def run_migrations_offline():
         target_metadata=target_metadata,
         literal_binds=True,
         dialect_opts={"paramstyle": "named"},
-        user_module_prefix='src.auth.models',
-        include_schemas=True
+        user_module_prefix="src.auth.models",
+        include_schemas=True,
     )
     with context.begin_transaction():
         context.run_migrations()
@@ -48,14 +48,15 @@ def run_migrations_offline():
 def run_migrations_online():
     engine = engine_from_config(
         config.get_section(config.config_ini_section),
-        prefix='sqlalchemy.',
-        poolclass=pool.NullPool)
+        prefix="sqlalchemy.",
+        poolclass=pool.NullPool,
+    )
     connection = engine.connect()
     context.configure(
         connection=connection,
         target_metadata=target_metadata,
-        user_module_prefix='scr.auth.models',
-        include_schemas=True
+        user_module_prefix="scr.auth.models",
+        include_schemas=True,
     )
 
     try:

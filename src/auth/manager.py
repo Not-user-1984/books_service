@@ -1,8 +1,13 @@
 from typing import Optional
 
 from fastapi import Depends, Request
-from fastapi_users import (BaseUserManager, IntegerIDMixin, exceptions, models,
-                           schemas)
+from fastapi_users import (
+    BaseUserManager,
+    IntegerIDMixin,
+    exceptions,
+    models,
+    schemas,
+)
 
 from db.models import User
 from auth.utils import get_user_db
@@ -14,7 +19,8 @@ class UserManager(IntegerIDMixin, BaseUserManager[User, int]):
     verification_token_secret = Settings.SECRET_AUTH
 
     async def on_after_register(
-            self, user: User, request: Optional[Request] = None):
+        self, user: User, request: Optional[Request] = None
+    ):
         print(f"User {user.id} has registered.")
 
     async def create(
@@ -37,8 +43,7 @@ class UserManager(IntegerIDMixin, BaseUserManager[User, int]):
         password = user_dict.pop("password")
         user_dict["hashed_password"] = self.password_helper.hash(password)
 
-        created_user = await self.user_db.create(
-            user_dict)
+        created_user = await self.user_db.create(user_dict)
 
         await self.on_after_register(created_user, request)
 

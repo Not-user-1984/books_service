@@ -14,7 +14,7 @@ async def create_category(db: AsyncSession, category: schemas.CategoryCreate):
     if existing_category.scalar_one_or_none():
         raise HTTPException(
             status_code=409,
-            detail="Category with the same name already exists"
+            detail="Category with the same name already exists",
         )
 
     db_category = models.Category(**category.dict())
@@ -34,9 +34,8 @@ async def get_category(db: AsyncSession, category_id: int):
 
 # Update
 async def update_category(
-        db: AsyncSession,
-        category_id: int,
-        category_update: schemas.CategoryCreate):
+    db: AsyncSession, category_id: int, category_update: schemas.CategoryCreate
+):
     db_category = await get_category(db, category_id)
 
     if db_category:
@@ -48,9 +47,7 @@ async def update_category(
 
 
 # Delete
-async def delete_category(
-        db: AsyncSession,
-        category_id: int):
+async def delete_category(db: AsyncSession, category_id: int):
     db_category = await get_category(db, category_id)
     if db_category:
         await db.delete(db_category)

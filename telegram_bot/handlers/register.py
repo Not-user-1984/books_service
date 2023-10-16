@@ -53,13 +53,12 @@ async def process_email(message: Message, state: FSMContext):
 async def process_password(message: Message, state: FSMContext):
     await state.update_data(password=message.text)
     user_data = await state.get_data()
-    await message.answer(
-        f"Спасибо, {user_data['name']}, идет регистрация.")
+    await message.answer(f"Спасибо, {user_data['name']}, идет регистрация.")
 
     user_data = {
-        "email": user_data['email'],
-        "password": user_data['password'],
-        "username": user_data['name']
+        "email": user_data["email"],
+        "password": user_data["password"],
+        "username": user_data["name"],
     }
     json_data = json.dumps(user_data)
     print(json_data)

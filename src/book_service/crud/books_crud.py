@@ -24,8 +24,8 @@ async def get_book(db: AsyncSession, book_id: int):
 
 # Update
 async def update_book(
-        db: AsyncSession,
-        book_id: int, book_update: schemas.BookCreate):
+    db: AsyncSession, book_id: int, book_update: schemas.BookCreate
+):
     db_book = await get_book(db, book_id)
     if db_book:
         for field, value in book_update.dict().items():
@@ -36,9 +36,7 @@ async def update_book(
 
 
 # Delete
-async def delete_book(
-        db: AsyncSession,
-        book_id: int):
+async def delete_book(db: AsyncSession, book_id: int):
     db_book = await get_book(db, book_id)
     if db_book:
         await db.delete(db_book)
