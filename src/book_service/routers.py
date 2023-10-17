@@ -8,7 +8,6 @@ from book_service.crud import (
     users_crud,
 )
 from db.database import get_async_session
-
 from . import schemas
 
 router = APIRouter()

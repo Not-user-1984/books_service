@@ -28,6 +28,6 @@ async def fetch_login_token(username, password):
         }
         response = await client.post(url, data=data)
         if response.status_code == 200:
-            return response
+            return response.json()
         else:
             return None

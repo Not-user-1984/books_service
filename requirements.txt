@@ -7,3 +7,4 @@ sqlalchemy
 aiogram
 aiogram-dialog
 black
+motor

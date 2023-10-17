@@ -36,7 +36,7 @@ async def process_password(message: Message, state: FSMContext):
     await message.answer(f"Спасибо, {user_data['name']}, вход.")
 
     token = await fetch_login_token(user_data["name"], user_data["password"])
-    print(token)
+    print(token.get("access_token"))
     # Получаем все куки из объекта response
     # jwt_token = response.get("bonds")
     # print(jwt_token)
