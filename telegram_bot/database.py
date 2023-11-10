@@ -1,22 +1,20 @@
 import motor.motor_asyncio
 
-from config import settings
+
+MONGO_URL_DB = "mongodb://user:699699@localhost:27017"
 
 
-async def connect_to_mongodb():
+# Функция для установления асинхронного соединения с MongoDB
+async def create_mongo_connection():
+    client = motor.motor_asyncio.AsyncIOMotorClient(MONGO_URL_DB)
+    return client
+
+
+# Функция для добавления данных в коллекцию
+async def insert_data(collection, data):
     try:
-        client = motor.motor_asyncio.AsyncIOMotorClient(settings.MONGO_URL_DB)
-        db = client[settings.MONGO_DATABASE]
-        print("Подключено к MongoDB асинхронно")
-        # Теперь вы можете взаимодействовать с базой данных асинхронно
-        # например, получить коллекцию
-        # collection = db["имя_коллекции"]
+        await collection.insert_one(data)
+        return True
     except Exception as e:
-        print("Ошибка подключения к MongoDB:", e)
-
-
-if __name__ == '__main__':
-    import asyncio
-
-    loop = asyncio.get_event_loop()
-    loop.run_until_complete(connect_to_mongodb())
+        print(f"An error occurred while inserting data: {e}")
+        return False

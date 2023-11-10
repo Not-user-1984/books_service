@@ -11,7 +11,7 @@ class Settings:
     MONGO_USER: str = os.getenv("MONGO_USER")
     MONGO_PASSWORD: str = os.getenv("MONGO_PASSWORD")
     MONGO_DATABASE: str = os.getenv("MONGO_DATABASE")
-    MONGO_URL_DB: str = f"mongodb://{MONGO_USER}:{MONGO_PASSWORD}@localhost:27017/{MONGO_DATABASE}"
+    MONGO_URL_DB: str = f'mongodb://{MONGO_USER}:{MONGO_PASSWORD}@localhost:27017/{MONGO_DATABASE}'
 
 
 settings = Settings()
